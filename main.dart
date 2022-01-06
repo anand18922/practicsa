@@ -7,6 +7,10 @@ import 'package:http/http.dart' as http;
 import 'package:untitled1/Question.dart';
 import 'package:untitled1/Testpaper.dart';
 import 'package:untitled1/NavBar.dart';
+import 'package:flutter/cupertino.dart';
+
+
+
 
 
 
@@ -14,6 +18,7 @@ import 'package:untitled1/NavBar.dart';
 void main() {
   runApp(MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   @override
@@ -30,7 +35,8 @@ class MyApp extends StatelessWidget {
 
       title: 'Splash Screen',
       theme: ThemeData(
-        primarySwatch: Colors.teal,
+        primarySwatch: Colors.red,
+        secondaryHeaderColor: Colors.white,
       ),
 
       home: MyHomePage(),
@@ -51,11 +57,12 @@ class _MyHomePageState extends State<MyHomePage> {
             ()=>Navigator.pushReplacement(context,
             MaterialPageRoute(builder:
                 (context) =>
-                SecondScreen()
+                Loginpage()
             )
         )
     );
   }
+  GlobalKey<FormState> globalKey = new GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -64,96 +71,228 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-class SecondScreen extends StatelessWidget {
+class Loginpage extends StatelessWidget {
+  get globalFormKey => null;
+  bool hidePassword = true;
+
+  get scaffoldKey => null;
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: scaffoldKey,
 
 
         appBar: AppBar(
 
 
-          title: Center(child: new Text("PRACTICSHA"),),
+          title: Center(child: new Text("Practicsha"),),
         ),
-        body: Column(
-            children: [
 
+        body: SingleChildScrollView(
+            child:Column(
+              children:<Widget>[
+               Stack(
+                children:<Widget>[
+                  Container(
 
-              Container(
+                   width:double.infinity,
 
+                   padding: EdgeInsets.symmetric(vertical: 30,horizontal:20),
+                   margin: EdgeInsets.symmetric(vertical: 85,horizontal:20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius. circular(20),
+                      color: Theme.of(context).secondaryHeaderColor,
+                    boxShadow: [
 
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(10),
+                   BoxShadow(color: Theme.of(context).hintColor.withOpacity(0.2),
+                   offset: Offset(0,10),
+                   blurRadius:20
 
-
-                  child: TextField(decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Email Id",
-                      hintText: 'Enter you email id'
-
-
-                  ),
-
-
-                  )
-              ),
-              Container(
-
-                  padding: EdgeInsets.all(10),
-                  child: TextField(decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Password",
-                      hintText: 'Enter your Password'
+                 ) ]
 
 
                   ),
 
-                  )
-              ),
-              Container(
-                child: RaisedButton(
-                  textColor: Colors.white,
-                  color: Colors.teal,
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyHome()));
-                  },
-                  child: Text('Login'),
+                  child:Form(key: globalFormKey, child: Column(
+                       children:<Widget> [
+                         SizedBox(height: 25,),
+                          Text("Login",style:Theme.of(context).textTheme.headline2,),
+                         SizedBox(height: 20,),
+                         new TextFormField(
+                           keyboardType: TextInputType.emailAddress,
+                           validator: (input)=> !input!.contains("@")
+                               ?" Email Id should be Valid":null,
+                           decoration: new InputDecoration(hintText:"Email Address",
+                               enabledBorder: UnderlineInputBorder(borderSide:BorderSide(color:Theme.of(context).accentColor.withOpacity(0.2),
+
+                               ),
+                               ),
+                               focusedBorder: UnderlineInputBorder
+                                 (borderSide:BorderSide
+                                 (color: Theme.of(context).accentColor,)
+                                 ,),
+                               prefixIcon: Icon(Icons.email,color:
+                               Theme.of(context).accentColor)
+
+                           ),
+                         ),
+                         SizedBox(height: 20,),
+                         TextFormField(
+                           keyboardType: TextInputType.text,
+                           validator: (input)=> input!.length < 3
+                               ?" Password  should be more than 3 charecters":null,
+                           obscureText: hidePassword,
+                           decoration: new InputDecoration(hintText:"Password",
+                               enabledBorder: UnderlineInputBorder(borderSide:BorderSide(color:Theme.of(context).accentColor.withOpacity(0.2),
+
+                               ),
+                               ),
+                               focusedBorder: UnderlineInputBorder
+                                 (borderSide:BorderSide
+                                 (color: Theme.of(context).accentColor,)
+                                 ,),
+                               prefixIcon: Icon(Icons.lock,
+                                   color:
+                               Theme.of(context).accentColor),
+                             suffixIcon: IconButton(
+                                onPressed: (){
+                                  setState(() {
+                                    hidePassword =!hidePassword;
+                                  });
+                                },
+                               color: Theme.of(context).accentColor.withOpacity(0.4)
+                               , icon:Icon(hidePassword? Icons.visibility_off:
+                             Icons.visibility),
+                             ),
+                           ),
+                         ),
+                         SizedBox(height: 30,),
+                         FlatButton( padding: EdgeInsets .symmetric(vertical: 12,horizontal: 80),
+
+                             onPressed:(){
+                               Navigator.push(context,
+                                   MaterialPageRoute(builder: (context) => MyHome()));
+                             },
+                           child: Text("Login",style: TextStyle(color:Colors.white),),
+
+                         color: Theme.of(context).accentColor,
+                         shape: StadiumBorder(),),
+
+                         SizedBox(height: 5,),
+                    FlatButton(
+                              onPressed: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) => signup()));
+                              },
+                              child: Text(
+                                'sign up',style:Theme.of(context).textTheme.headline6,),
 
 
-                ),
-              ),
-
-              FlatButton(
-                onPressed: () {
-                  //TODO FORGOT PASSWORD SCREEN GOES HERE
-                },
-                child: Text(
-                  'Forgot Password',
-                  style: TextStyle(color: Colors.teal, fontSize: 15),
-                ),
-              ),
-              FlatButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => signup()));
-                },
-                child: Text(
-                  'sign up',
-                  style: TextStyle(color: Colors.teal, fontSize: 15),
-                ),
-              ),
 
 
-            ]
+                            ),
 
 
+                       ],
+
+
+                          ),),
+
+
+                  // alignment: Alignment.center,
+                  //padding: EdgeInsets.all(10),
+
+        //
+        //           child: TextField(decoration: InputDecoration(
+        //               border: OutlineInputBorder(),
+        //               labelText: "Email Id",
+        //               hintText: 'Enter you email id',
+        //               prefixIcon: Icon(Icons.email,color:
+        //               Theme.of(context).accentColor)
+        //
+        //
+        //           ),
+        //
+        //
+        //           )
+        //       ),
+        //       Container(
+        //
+        //           padding: EdgeInsets.all(10),
+        //           child: TextField(decoration: InputDecoration(
+        //               border: OutlineInputBorder(),
+        //               labelText: "Password",
+        //               hintText: 'Enter your Password',
+        //               prefixIcon: Icon(Icons.lock,color:
+        //           Theme.of(context).accentColor)),
+        //
+        //           )
+        //       ),
+        //       Container(
+        //         child: RaisedButton(
+        //           textColor: Colors.white,
+        //           color: Colors.teal,
+        //           onPressed: () {
+        //             Navigator.push(context,
+        //                 MaterialPageRoute(builder: (context) => MyHome()));
+        //           },
+        //           child: Text('Login'),
+        //
+        //
+        //         ),
+        //       ),
+        //
+        //       FlatButton(
+        //         onPressed: () {
+        //           //TODO FORGOT PASSWORD SCREEN GOES HERE
+        //         },
+        //         child: Text(
+        //           'Forgot Password',
+        //           style: TextStyle(color: Colors.teal, fontSize: 15),
+        //         ),
+        //       ),
+        //       FlatButton(
+        //         onPressed: () {
+        //           Navigator.push(context,
+        //               MaterialPageRoute(builder: (context) => signup()));
+        //         },
+        //         child: Text(
+        //           'sign up',
+        //           style: TextStyle(color: Colors.teal, fontSize: 15),
+        //         ),
+        //       ),
+        //
+        //
+        //     ]
+        //
+        //
+        // )
         )
-
-
+  ]
+        )
+    ]
+    )
+        )
     );
   }
+
+
 }
+
+void setState(Null Function() param0) {
+}
+
+
+
+
+
+
+
+
+
 
 
 
@@ -261,7 +400,7 @@ class _MyHomeState extends State<MyHome> {
     return Scaffold(
       drawer: NavBar(),
       appBar: AppBar(
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.red,
         bottomOpacity: 0,
         elevation: 0,
         title: new Text("Standard"),
@@ -288,6 +427,7 @@ class _MyHomeState extends State<MyHome> {
             return Center(child: CircularProgressIndicator());
 
           return GridView(
+
             gridDelegate:
             SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
             children: snapshot.data!
@@ -306,13 +446,20 @@ class _MyHomeState extends State<MyHome> {
                 subtitle: Text(user.class_name),
                 leading: CircleAvatar(
 
-                  backgroundColor: Colors.teal,
+                  backgroundColor: Colors.red,
                   child: Text(user.class_name[0],
                       style: TextStyle(
                         color: Colors.white,
+
                         fontSize: 20.0,
+
                       )),
                 ),
+
+                   shape: StadiumBorder(),
+
+
+
               ),
             )
                 .toList(),
@@ -418,7 +565,7 @@ class _signupState extends State<signup> {
                 ),
                 Container(
                   child: FlatButton(
-                    color: Colors.teal,
+                    color: Colors.red,
                     child: Text('Submit', style: TextStyle(fontSize: 20.0,
                       color: Colors.white,),
                     ),
